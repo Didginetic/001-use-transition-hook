@@ -1,0 +1,30 @@
+body {
+  font-family: monospace;
+  background-color: #eee;
+}
+
+.equalizer {
+  display: flex;
+  height: 350px;
+  margin-top: 30px;
+
+  > div {
+    background-color: black;
+
+    > div {
+      width: 5px;
+      height: 10px;
+      margin: 1px;
+      opacity: 0.75;
+    }
+  }
+}
+
+input {
+  margin-top: 30px;
+  width: 300px;
+  font-family: monospace;
+  font-size: 20px;
+  outline: none;
+  color: #333;
+}

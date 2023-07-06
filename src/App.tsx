@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { v4 as uuid } from 'uuid';
+import { Equalizer } from './components';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const getRandomInt = (max: number, min: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const makeColor = (colorNum: number, colors: number) => {
+  if (colors < 1) colors = 1;
+  return colorNum * (360 / colors) % 360;
+}
+
+const renderColumns = (amount: number) => {
+  const amplitudes: IAmplitude[] = []
+
+  for(let i = 0; i < amount; i++) {
+    const color = "hsl( " + makeColor(i, amount) + ", 100%, 50% )";
+    amplitudes.push({  color, id: uuid() })
+  }
+
+  return { amplitudes, id: uuid() }
+}
+
+export interface IAmplitude {
+  color: string;
+  id: string;
+}
+
+export interface IEqualizer {
+  id: string;
+  amplitudes: IAmplitude[]
+}
+
+const App = () => {
+  const [equalizer, setEqualizer] = useState<IEqualizer[]>([])
+  const [value, setValue] = useState<string>('')
+
+  useEffect(() => {
+    setInterval(() => {
+      setEqualizer(
+        Array(150)
+          .fill(0)
+          .map(() => renderColumns(getRandomInt(30, 5)))
+      )
+    }, 100)
+  }, [])
+
+  const handleChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(value)
+  }
+
+  return <>
+    <input value={value} onChange={handleChange} />
+    <Equalizer equalizer={equalizer} />
+  </>
 }
 
 export default App;
